@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- **Tag format**: Tags are now written as `#tag` (bare format) instead of `[#tag]` (bracket format). The bare format is what Reminders.app uses natively for its Tags feature (macOS 12+); tags written by this server now appear as native tag chips in Reminders.app and are indexed in the Tags sidebar. The JXA/AppleScript Reminders dictionary and EventKit public API have no `tags` property — writing `#tag` to the notes field is the only available mechanism for native tag integration. Existing reminders with `[#tag]` in notes continue to be read correctly (backward-compatible read path) and will be rewritten to bare format on their next update.
+
 ## [1.4.0] - 2026-03-10
 
 ### Added

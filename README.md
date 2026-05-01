@@ -880,16 +880,15 @@ Organize overdue reminders by due date
 
 ## Tags System
 
-Tags provide cross-list categorization for reminders. They are stored in the notes field using the `[#tag]` format, which keeps them human-readable in the native Reminders app.
+Tags provide cross-list categorization for reminders. They are stored in the notes field using the native `#tag` format recognized by Reminders.app (macOS 12+). Tags written by this server appear as native tag chips and are indexed in the Tags sidebar.
 
 ### Tag Format
 
-Tags are stored at the end of notes:
+Tags are stored at the beginning of notes:
 
 ```text
+#work #urgent #project-alpha
 User notes here...
-
-[#work] [#urgent] [#project-alpha]
 ```
 
 ### Tag Rules
