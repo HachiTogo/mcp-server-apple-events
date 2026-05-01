@@ -2,12 +2,18 @@
  * tagUtils.ts
  * Utilities for handling tags stored in reminder notes.
  *
- * Supports two tag formats:
- * - Bracket format: [#tagname]  (written by this MCP server)
- * - Bare format:    #tagname    (used by Apple Reminders native UI)
+ * Tags are written and read as bare #tagname — the format Reminders.app uses
+ * natively for its Tags feature (macOS 12+). Writing #tagname to the EventKit
+ * notes field causes Reminders.app to recognize it as a native tag chip and
+ * index it in the Tags sidebar.
  *
- * Writing always uses bracket format for unambiguous round-tripping.
- * Reading parses both formats so native Apple Reminders tags are recognized.
+ * The JXA / AppleScript Reminders dictionary and the EventKit public API
+ * (EKReminder) have no tags property; writing to notes is the only available
+ * mechanism for native tag integration.
+ *
+ * Legacy bracket format [#tagname] (written by earlier versions of this
+ * server) is still read correctly for backward compatibility, and will be
+ * rewritten as bare #tagname on next update.
  */
 
 // Regex to match tags in [#tag] bracket format
@@ -81,9 +87,10 @@ export function stripTags(notes: string | null | undefined): string {
 }
 
 /**
- * Formats tags into the [#tag] format for storage
+ * Formats tags as bare #tag strings for storage in the notes field.
+ * Reminders.app recognizes this as the native tag format (macOS 12+).
  * @param tags - Array of tag names (with or without # prefix)
- * @returns Formatted tag string
+ * @returns Space-separated #tag string
  */
 export function formatTags(tags: string[]): string {
   if (!tags || tags.length === 0) return '';
@@ -91,7 +98,7 @@ export function formatTags(tags: string[]): string {
   return tags
     .map((tag) => {
       const cleanTag = normalizeTag(tag);
-      return cleanTag ? `[#${cleanTag}]` : '';
+      return cleanTag ? `#${cleanTag}` : '';
     })
     .filter(Boolean)
     .join(' ');

@@ -103,17 +103,17 @@ describe('tagUtils', () => {
   describe('combineTagsAndNotes', () => {
     it('deduplicates tags after normalization', () => {
       const result = combineTagsAndNotes(['Work', '#work'], 'Hello');
-      expect(result).toBe('[#work]\nHello');
+      expect(result).toBe('#work\nHello');
     });
 
     it('does not duplicate existing normalized tags', () => {
       const result = combineTagsAndNotes(['Work'], '[#work] Hello');
-      expect(result).toBe('[#work]\nHello');
+      expect(result).toBe('#work\nHello');
     });
 
     it('picks up bare tags from existing notes', () => {
       const result = combineTagsAndNotes(['urgent'], '#social My note');
-      expect(result).toBe('[#urgent] [#social]\nMy note');
+      expect(result).toBe('#urgent #social\nMy note');
     });
   });
 
@@ -136,8 +136,8 @@ describe('tagUtils', () => {
   });
 
   describe('formatTags', () => {
-    it('formats tags in [#tag] bracket format', () => {
-      expect(formatTags(['work', 'social'])).toBe('[#work] [#social]');
+    it('formats tags as bare #tag format for native Reminders compatibility', () => {
+      expect(formatTags(['work', 'social'])).toBe('#work #social');
     });
 
     it('returns empty string for empty array', () => {
@@ -148,14 +148,14 @@ describe('tagUtils', () => {
   describe('addTagsToNotes', () => {
     it('adds tags to notes with bare existing tags', () => {
       const result = addTagsToNotes(['urgent'], '#social My note');
-      expect(result).toBe('[#social] [#urgent]\nMy note');
+      expect(result).toBe('#social #urgent\nMy note');
     });
   });
 
   describe('removeTagsFromNotes', () => {
     it('removes tags from notes with bare existing tags', () => {
       const result = removeTagsFromNotes(['social'], '#social #work My note');
-      expect(result).toBe('[#work]\nMy note');
+      expect(result).toBe('#work\nMy note');
     });
   });
 });
